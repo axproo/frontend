@@ -1,50 +1,76 @@
-# vue-project
+# Axproo Frontend – Vue 3 + Bootstrap 5
 
-This template should help get you started developing with Vue 3 in Vite.
+Bienvenue dans le frontend du projet Axproo.
+Ce dépôt contient l’interface utilisateur développée en Vue.js 3 avec Bootstrap 5, pensée pour être simple, moderne et responsive.
 
-## Recommended IDE Setup
+## Prérequis
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Chaque membre doit installer en local :
 
-## Customize configuration
+- Node.js ≥ 18
+- npm ≥ 9
+- Git
+- VS Code (recommandé, avec extensions Prettier et ESLint)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Installation locale
+### Cloner le projet
 
-## Project Setup
+```sh
+git clone https://github.com/axproo/frontend.git
+cd frontend
+```
+
+### Installer les dépendances
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Lancer le projet
 
 ```sh
 npm run dev
+- Disponible sur: http://localhost:5173
 ```
 
-### Compile and Minify for Production
+### Structure du projet
 
 ```sh
-npm run build
+src/
+ ├── assets/        # Images, icônes, styles
+ ├── components/    # Composants réutilisables Vue
+ ├── layouts/       # Layouts globaux (Header, Sidebar…)
+ ├── pages/         # Pages principales (Login, Dashboard, 404…)
+ ├── router/        # Configuration du routeur Vue
+ ├── store/         # Pinia (gestion d’état)
+ └── main.js        # Point d’entrée
 ```
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+### Routing
+
+Le frontend utilise Vue Router 4.
+Chaque fonctionnalité possède sa route dédiée.
 
 ```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
+{
+  path: '/login',
+  name: 'Login',
+  component: () => import('../pages/Login.vue')
+}
 ```
+### UI / Design
 
-### Git/GitHub pour l'équipe
+- Bootstrap 5 est utilisé pour la mise en page et les composants.
+- Les pages principales incluent :
+    - Login
+    - Dashboard
+    - Page 404 personnalisée
+
+### Workflow Git
+
+Même organisation que le backend :
+
+#### Créer une branche par fonctionnalité
+```sh
+git checkout -b feature/nom-fonctionnalite
+```
