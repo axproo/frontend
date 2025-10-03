@@ -104,10 +104,10 @@ Secrets nécessaires :
 
 Offrir une expérience utilisateur claire et intuitive, avec un workflow de développement collaboratif fluide :
 
-✅ Architecture modulaire (Vue 3 + Pinia + Vue Router)
-✅ Design responsive (Bootstrap 5)
-✅ CI/CD (tests + déploiement auto)
-✅ Documentation claire pour l’équipe
+- Architecture modulaire (Vue 3 + Pinia + Vue Router)
+- Design responsive (Bootstrap 5)
+- CI/CD (tests + déploiement auto)
+- Documentation claire pour l’équipe
 
 Ce frontend est la vitrine utilisateur de la plateforme Axproo.
 Ensemble, construisons une interface moderne et performante.
