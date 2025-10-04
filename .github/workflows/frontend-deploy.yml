@@ -1,0 +1,46 @@
+name: 🚀 Deploy Frontend Vue 3 + Bootstrap 5
+
+# Déclenche le workflow uniquement sur les pushes sur la branche main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Récupérer le code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Installer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      # 3️⃣ Installer les dépendances frontend
+      - name: Install frontend dependencies
+        run: |
+          npm ci
+
+      # 4️⃣ Construire le frontend
+      - name: Build frontend
+        run: |
+          npm run build
+
+      # 5️⃣ Déployer sur cPanel via SFTP
+      - name: Deploy Frontend via SFTP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.FTP_HOST }}          # ton serveur cPanel
+          username: ${{ secrets.FTP_USERNAME }}
+          key: ${{ secrets.SFTP_PRIVATE_KEY }}   # clé SSH pour le serveur
+          port: ${{ secrets.SFTP_PORT }}         # souvent 22 ou ton port personnalisé
+          source: "./dist/"             # dossier généré par npm run build
+          target: "/home/axproo/public_html/vue_dashboard/"   # dossier cible sur le serveur
+          rm: true                               # supprime les anciens fichiers
+          overwrite: true                        # écrase uniquement les fichiers modifiés
+          debug: true                            # logs détaillés pour le débogage
