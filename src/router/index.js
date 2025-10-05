@@ -18,7 +18,13 @@ const staticRoutes = [
     name: 'Login',
     component: () => import('@/pages/auth/LoginPage.vue'),
     meta: { auth_require: false, headline: 'Login' },
-  }
+  },
+  {
+    path: '/password',
+    name: 'Password',
+    component: () => import('@/pages/auth/PasswordPage.vue'),
+    meta: { auth_require: false, headline: 'Password' },
+  },
 ]
 
 /**

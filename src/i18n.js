@@ -6,7 +6,7 @@ const i18n = createI18n({
   legacy: false,
   globalInjection: true,
   locale: 'fr',
-  fallbackLocale: 'en',
+  fallbackLocale: 'fr',
   messages: {
     fr,
     en

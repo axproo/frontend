@@ -13,8 +13,10 @@ export const useButtonStore = defineStore('button', {
         // Récupération de la liste des boutons
         async fetchButtons() {
             try {
-                const response = await get_data('/buttons')
-                console.log(response);
+                const response = await get_data('/ui/buttons')
+                if (response) {
+                    this.lists = response.data.query
+                }
             } catch (error) {
                 showError(error.message || error);
             }
