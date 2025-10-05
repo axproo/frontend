@@ -39,8 +39,8 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           key: ${{ secrets.SFTP_PRIVATE_KEY }}   # clé SSH pour le serveur
           port: ${{ secrets.SFTP_PORT }}         # souvent 22 ou ton port personnalisé
-          source: "./dist/"             # dossier généré par npm run build
+          source: "./"             # dossier généré par npm run build
           target: "/home/axproo/public_html/vue_dashboard/"   # dossier cible sur le serveur
-          rm: false                              # supprime les anciens fichiers
+          rm: true                              # supprime les anciens fichiers
           overwrite: true                        # écrase uniquement les fichiers modifiés
           debug: true                            # logs détaillés pour le débogage

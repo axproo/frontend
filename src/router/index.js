@@ -1,23 +1,43 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-  ],
-})
+let routerInstance = null
+let dynamicRoutes = []
 
-export default router
+/**
+ * Création des routes statiques
+ */
+const staticRoutes = [
+  {
+    path: '/',
+    redirect: (to) => {
+        return '/login'
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/pages/auth/LoginPage.vue'),
+    meta: { auth_require: false, headline: 'Login' },
+  }
+]
+
+/**
+ * Appel des routes dynamiques
+ */
+async function createDynamicRouter() {
+  // Création des routes (statiques et dynamiques)
+  routerInstance = createRouter({
+    history: createWebHistory(import.meta.env.VITE_BASE_URL || '/'),
+    routes: [...staticRoutes, ...dynamicRoutes],
+  })
+
+  // Initialisation des routes avant chargement
+  routerInstance.beforeEach(async (to, from, next) => {
+    next()
+  })
+
+  // Initialisation des routes après chargement
+  routerInstance.afterEach(async (to) => {})
+  return routerInstance
+}
+export default createDynamicRouter
