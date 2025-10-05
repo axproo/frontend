@@ -19,6 +19,7 @@
         <!-- {{ field.required }} -->
 
         <!-- Composant de Champs -->
+         {{ errors[field.name] }}
         <component :is="getComponentForField(field)" v-bind="inputProps(field)" :modelValue="inputFormData(field)"
             @input="(e) => !(field.type !== 'select' || field.type !== 'multiple') ? handleInput(field, e) : null"
             @update:modelValue="(e) => handleInput(field, e)"
