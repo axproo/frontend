@@ -81,15 +81,8 @@ jobs:
           EOT
 
       # 5️⃣ Déployer sur cPanel via SFTP
-      - name: Deploy Frontend via SFTP
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.FTP_HOST }}          # ton serveur cPanel
-          username: ${{ secrets.FTP_USERNAME }}
-          key: ${{ secrets.SFTP_PRIVATE_KEY }}   # clé SSH pour le serveur
-          port: ${{ secrets.SFTP_PORT }}         # souvent 22 ou ton port personnalisé
-          source: "dist/"             # dossier généré par npm run build
-          target: "/home/axproo/public_html/vue_dashboard"   # dossier cible sur le serveur
-          rm: true                              # supprime les anciens fichiers
-          overwrite: true                        # écrase uniquement les fichiers modifiés
-          debug: true                            # logs détaillés pour le débogage
+      - name: Deploy dist via rsync
+        run: |
+          rsync -av --delete -e "ssh -i ${{ secrets.SFTP_PRIVATE_KEY }} -p ${{ secrets.SFTP_PORT }}" \
+            dist/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/home/axproo/public_html/vue_dashboard/
+        
