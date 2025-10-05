@@ -1,5 +1,8 @@
+import { useApi } from "@/core/http";
 import { showError } from "@/utils/toastr";
 import { defineStore } from "pinia";
+
+const {get_data} = useApi();
 
 export const useButtonStore = defineStore('button', {
     state: () => ({
@@ -13,7 +16,6 @@ export const useButtonStore = defineStore('button', {
                 const response = await get_data('/buttons')
                 console.log(response);
             } catch (error) {
-                console.log(error);
                 showError(error.message || error);
             }
         }
