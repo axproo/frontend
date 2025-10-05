@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/vue_dashboard',
+  base: '/',
   define: { 'process_env': {}},
   plugins: [
     vue(),
