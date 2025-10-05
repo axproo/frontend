@@ -10,13 +10,40 @@
             <slot></slot>
         </div>
     </div>
+    <FooterLayout />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import FooterLayout from './FooterLayout.vue';
+import { useBodyStore } from '@/stores/BodyStore';
+import { useButtonStore } from '@/stores/ButtonStore';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const body = useBodyStore();
+const button = ref({});
+const buttons = useButtonStore();
 
 const isDark = ref(false);
+
+const applyAuthLayout = async () => {
+    body.setBody({
+        classes: ''
+    })
+    await buttons.fetchButtons();
+
+}
+
+onMounted(async () => {
+    await applyAuthLayout();
+})
+
+watch(() => route.name, async (newName) => {
+    if (['login','register'].includes(newName)) {
+        await applyAuthLayout();
+    }
+})
 </script>
 
 <style scoped>
