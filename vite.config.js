@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/vue_dashboard',
   define: { 'process_env': {}},
   plugins: [
     vue(),
@@ -14,7 +14,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'vue': 'vue/dist/vue.esm-bundler.js'
     },
   },
   build: {
@@ -24,14 +25,7 @@ export default defineConfig({
     assetsDir: 'assets',
     rollupOptions: {
       input: {
-        index: 'index.html',
-        login: 'src/pages/auth/LoginPage.vue',
-        password: 'src/pages/auth/PasswordPage.vue',
-        token: 'src/pages/auth/verifyTokenPage.vue',
-        email: 'src/pages/auth/EmailVerifyPage.vue',
-        otp: 'src/pages/auth/OauthVerify.vue',
-        erreur: 'src/pages/ErrorPage.vue',
-        logout: 'src/pages/auth/LogoutPage.vue',
+        main: 'index.html',
       },
       output: {
         entryFileNames: `assets/pages/[name].js`,
