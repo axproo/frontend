@@ -18,7 +18,7 @@ const errorMessages = {
   413: 'Données envoyées trop volumineuses',
   415: 'Type de média non supporté',
   422: 'Requête non traitable (données invalides)',
-  429: 'Trop de requêtes. Veuillez réessayer plus tard.',
+  // 429: 'Trop de requêtes. Veuillez réessayer plus tard.',
   // 500: 'Erreur interne du serveur',
   501: 'Fonctionnalité non implémentée <b>(Function)</b>',
   502: 'Mauvaise passerelle',

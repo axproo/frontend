@@ -1,9 +1,7 @@
 <template>
     <div v-if="isAlert && alert" :class="['alert', alert.class]" role="alert">
         <i :class="alert.icon"></i>
-        <span>
-            {{ message }}
-        </span>
+        <span v-html="message"></span>
     </div>
 </template>
 

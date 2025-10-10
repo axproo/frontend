@@ -14,12 +14,11 @@
 
         <!-- Champs checkbox -->
         <div v-if="field.type === 'checkbox'" :class="checkBoxClass">
-
+            <CheckboxForm :key="field.name" v-bind="inputProps(field)" :model-value="[1,'1',true,'true'].includes(formData[field.name])" @change="(e) => handleInput(field, e)"/>
+            <label :for="field.name" class="form-check-label" v-html="field.label"></label>
         </div>
-        <!-- {{ field.required }} -->
 
         <!-- Composant de Champs -->
-         {{ errors[field.name] }}
         <component :is="getComponentForField(field)" v-bind="inputProps(field)" :modelValue="inputFormData(field)"
             @input="(e) => !(field.type !== 'select' || field.type !== 'multiple') ? handleInput(field, e) : null"
             @update:modelValue="(e) => handleInput(field, e)"
@@ -30,10 +29,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import InputForm from './plugins/InputForm.vue';
 import { useFormStore } from '@/stores/FormStore';
 import { useRoute } from 'vue-router';
+import CheckboxForm from './plugins/CheckboxForm.vue';
+import { kebabCase, camelCase } from 'lodash';
+import { showError } from '@/utils/toastr';
+import OtpForm from './plugins/OtpForm.vue';
 
 const props = defineProps({
     classLabel: { type: String, default: 'form-label' },
@@ -46,6 +49,8 @@ const route = useRoute();
 
 const formData = computed(() => forms.formData);
 const errors = computed(() => forms.errors);
+
+const isReadonlyHandled = ref(false);
 
 const filteredFields = computed(() => {
     const { fields } = forms
@@ -71,7 +76,10 @@ const inputProps = field => ({
 
 const getComponentForField = field => {
     switch (field.type) {
-        default: return field.type !== 'checkbox' && field.type !== 'code' ? InputForm : null
+        case 'password': case 'text': return InputForm;
+        case 'code': return OtpForm;
+        default: showError(`Aucun champs défini pour ${field.type}`)
+        // default: return field.type !== 'checkbox' && field.type !== 'code' ? InputForm : null
     }
 }
 
@@ -116,7 +124,45 @@ const handleInput = (field, event) => {
         emit('update:modelValue', { key: field.name, value: newValue });
     }
     forms.validateField(field, newValue, field.required);
+    updatedPageUrl()
 }
+
+const updatedPageUrl = () => {
+    const pageTitle = formData.value.page_title || '';
+    const title = route.name !== 'Menus' ? kebabCase(pageTitle) : camelCase(pageTitle);
+
+    const parentId = formData.value.parent_id;
+    const parentName = parentId ? Object.values(forms.fields).find(f => f.name === 'parent_id')?.option_values?.[parentId]?.toLowerCase() : '';
+
+    formData.value.slug = parentId ? `/${parentName}/${title}` : (title === 'dashboard' ? '/' : `/${title}`);
+    handleReadonlyFields();
+}
+
+const handleReadonlyFields = () => {
+    if (isReadonlyHandled.value) return;
+    isReadonlyHandled.value = true;
+
+    nextTick(() => {
+        Object.values(forms.fields).filter(f => f.is_readonly).forEach(field => {
+            const val = formData.value[field.name];
+            if (val) {
+                emit('update:modelValue', { key: field.name, value: val });
+            }
+        })
+    })
+}
+
+onMounted(() => updatedPageUrl())
+
+watch(() => forms.fields, () => {
+    isReadonlyHandled.value = false;
+    nextTick(handleReadonlyFields);
+}, { immediate: true})
+
+watch(() => formData.value, () => {
+    isReadonlyHandled.value = false;
+    nextTick(handleReadonlyFields);
+}, { deep: true})
 </script>
 
 <style scoped>

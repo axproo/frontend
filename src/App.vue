@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n';
 import Preloader from './components/ui/Preloader.vue';
 import { useBodyStore } from './stores/BodyStore';
 import { useRoute } from 'vue-router';
+import { wait } from './utils/formUtils';
 
 const {t} = useI18n();
 const body = useBodyStore();
@@ -18,10 +19,11 @@ const app_name = inject('app_name');
 const isLoading = ref(false);
 
 const loadPage = async () => {
-  isLoading.value = true
+  
+
   body.setBody({
     classes: `show ${localStorage.getItem('compact') === 'condensed' ? 'sidebar-enable' : ''}`,
-    title: `${app_name} - ${route?.meta?.headline || route?.name || 'Introuvable'}`,
+    title: `${route?.meta?.headline || route?.name || 'Introuvable'} - ${app_name}`,
     description: t('site_description'),
     author: import.meta.env.VITE_APP_SITE,
     attributes: {
@@ -30,13 +32,14 @@ const loadPage = async () => {
     }
   })
   localStorage.setItem('sess_require', route.meta.auth_require)
-
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  isLoading.value = false
 }
 
 onMounted(async () => {
+  isLoading.value = true
   await loadPage()
+
+  await wait(1500);
+  isLoading.value = false
 })
 
 watch(() => route?.fullPath, async () => {
